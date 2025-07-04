@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 function CarList({ data }) {
   return (
     <>
@@ -24,7 +25,13 @@ function CarList({ data }) {
             <strong>Mileage:</strong>
             {item.mileage}
           </p>
-        </div>
+          <Link
+            to={`/cars/${item.id}`}
+            className="text-blue-600 hover:underline block mt-2"
+          >
+            More Details →
+          </Link>
+        </div> 
       ))}
     </>
   );

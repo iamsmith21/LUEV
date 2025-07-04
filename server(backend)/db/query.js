@@ -52,6 +52,15 @@ async function getVehicles({price,mileage, accident_history}={}) {
   return rows;
 }
 
+
+async function getVehicleById(id){
+  const {rows} = await pool.query("SELECT * FROM vehicles WHERE id = $1", [id]);
+  console.log("Vehicle row:", rows[0]);
+  return rows[0];
+}
+
+
+
 async function getDistinct() {
   try {
     const brands= await pool.query("SELECT DISTINCT brand FROM vehicles ORDER BY brand")
@@ -73,5 +82,6 @@ module.exports = {
   getUserByEmail,
   getUserById,
   getVehicles,
-  getDistinct
+  getDistinct,
+  getVehicleById
 };
