@@ -125,7 +125,7 @@ const handleMileageSort = (e) => {
       <Search search={search} setSearch={setSearch} />
       {filteredResults.length == 0 ? (
         <div className="h-16 flex justify-center items-center">
-          <p className="text-center text-gray opacity-75">no results found</p>
+          <p className="text-center text-gray opacity-75">No Result Found!</p>
         </div>
       ) : (
         <CarList data={filteredResults} />

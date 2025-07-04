@@ -21,8 +21,20 @@ async function getUserById(id) {
   return rows[0];
 }
 
-async function getVehicles({price,mileage}={}) {
+async function getVehicles({price,mileage, accident_history}={}) {
   let query="SELECT * FROM vehicles"
+  const whereClause = [];
+  const values = [];
+
+  if( accident_history === "true" || accident_history === "false"){
+    whereClause.push(`accident_history = $${values.length + 1}`);
+    values.push(accident_history === "true"); //conv. to boolean
+  }
+
+  if(whereClause.length){
+    query += ` WHERE ${whereClause.join(" AND ")}`;
+  }
+
   const orderClause=[]
   if(price){
     orderClause.push(`price ${price.toUpperCase()}`) //price ASC or price DESC
@@ -36,7 +48,7 @@ async function getVehicles({price,mileage}={}) {
 
   }
 
-  const {rows}=await pool.query(query)
+  const {rows}=await pool.query(query, values)
   return rows;
 }
 
