@@ -9,11 +9,14 @@ import Shop from "./pages/Shop";
 import HotDeals from "./pages/HotDeals";
 import NavbarEle from "./Components/NavbarEle";
 import HowFinancingWorks from "./pages/HowFinancingWorks";
-import CarCalculator from "./pages/CarCalculator";
 import Contact from "./pages/Contact";
 import Footer from "./Components/Footer";
 import Login from "./pages/login";
 import VehicleDetail from "./pages/VehicleDetail";
+import LoanCalculator from "./pages/LoanCalculator";
+import LoanInfo from "./pages/LoanInfo";
+
+
 function App() {
   return (
     <Router>
@@ -27,10 +30,11 @@ function App() {
           <Route path="/cars" element={<Shop />} />
           <Route path="/hot-deals" element={<HotDeals />} />
           <Route path="/how-financing-works" element={<HowFinancingWorks />} />
-          <Route path="/car-calculator" element={<CarCalculator />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cars/:id" element={<VehicleDetail />} />
+          <Route path="/calculator" element={<LoanCalculator />} />
+          <Route path="/loan-info" element={<LoanInfo />} />
         </Routes>
       </div>
       <Footer />

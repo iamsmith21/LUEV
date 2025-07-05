@@ -36,11 +36,11 @@ function NavbarEle() {
                 id="nav-dropdown-finance"
                 className="mx-3"
               >
-                <NavDropdown.Item as={Link} to="/how-financing-works">
+                <NavDropdown.Item as={Link} to="/loan-info">
                   How Financing Works
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/car-calculator">
+                <NavDropdown.Item as={Link} to="/calculator">
                   Car Loan Calculator
                 </NavDropdown.Item>
               </NavDropdown>
