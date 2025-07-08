@@ -31,6 +31,9 @@ function NavbarEle() {
               <Nav.Link as={Link} to="/cars" className="mx-3">
                 Shop Cars
               </Nav.Link>
+              <Nav.Link as={Link} to="/cart" className="mx-3">
+                Cart
+              </Nav.Link>
               <NavDropdown
                 title="Financing"
                 id="nav-dropdown-finance"

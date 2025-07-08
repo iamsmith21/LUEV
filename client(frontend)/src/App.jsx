@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Shop from "./pages/Shop";
 import HotDeals from "./pages/HotDeals";
@@ -15,6 +14,7 @@ import Login from "./pages/login";
 import VehicleDetail from "./pages/VehicleDetail";
 import LoanCalculator from "./pages/LoanCalculator";
 import LoanInfo from "./pages/LoanInfo";
+import Cart from "./pages/Cart";
 
 
 function App() {

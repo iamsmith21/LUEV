@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useCart } from "../Components/CartOperations";
 
 function VehicleDetail(){
     const {id} = useParams();
     const [vehicle, setVehicle] = useState(null);
     const [loading, setLoading] = useState(true);
+    const {addToCart} = useCart();
 
 
     useEffect(() => {
@@ -33,7 +35,17 @@ function VehicleDetail(){
       <p><strong>Mileage:</strong> {vehicle.mileage} km</p>
       <p><strong>Accident History:</strong> {vehicle.accident_history ? "Yes" : "No"}</p>
       <p><strong>Report:</strong> {vehicle.history_report || "No report available"}</p>
-      
+      {vehicle && (
+  <button
+    onClick={() => {
+      console.log("Vehicle at button:", vehicle);
+      addToCart(vehicle);
+    }}
+    className="bg-blue-600 text-white px-6 py-2 mt-4 rounded"
+  >
+    Add to Cart
+  </button>
+)}
     </div>
   );
 
