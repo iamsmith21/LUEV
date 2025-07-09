@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCart } from "../Components/CartOperations";
+console.log("🚀 VehicleDetail loaded");
+import { Link } from "react-router-dom";
 
 function VehicleDetail(){
     const {id} = useParams();
@@ -36,16 +38,31 @@ function VehicleDetail(){
       <p><strong>Accident History:</strong> {vehicle.accident_history ? "Yes" : "No"}</p>
       <p><strong>Report:</strong> {vehicle.history_report || "No report available"}</p>
       {vehicle && (
-  <button
-    onClick={() => {
-      console.log("Vehicle at button:", vehicle);
-      addToCart(vehicle);
-    }}
-    className="bg-blue-600 text-white px-6 py-2 mt-4 rounded"
-  >
-    Add to Cart
-  </button>
-)}
+        <>
+        <button
+          onClick={() => {
+            console.log("🟢 Vehicle at button:", vehicle);
+            addToCart(vehicle);
+          }}
+          className="bg-blue-600 text-white px-6 py-2 mt-4 rounded"
+        >
+          Add to Cart
+        </button>
+
+
+        <div className="mt-4">
+          <Link
+            to="/cart"
+            className="inline-block text-center w-full md:w-auto bg-gray-900 text-white px-6 py-2 rounded hover:bg-gray-700 transition font-medium tracking-wide shadow no-underline"
+            >
+              Go to Cart
+          </Link>
+        </div>
+        </>
+
+
+      )}
+
     </div>
   );
 

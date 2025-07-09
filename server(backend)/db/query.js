@@ -77,11 +77,41 @@ async function getDistinct() {
   }
 }
 
+async function saveOrder(order) {
+  const {
+    shippingInfo,
+    paymentInfo,
+    items
+  } = order;
+
+  const query = `
+    INSERT INTO orders (
+      customer_name, address, city, province, postal_code,
+      card_name, card_last4, total_amount, items
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+  `;
+
+  const values = [
+    shippingInfo.name,
+    shippingInfo.address,
+    shippingInfo.city,
+    shippingInfo.province,
+    shippingInfo.postalCode,
+    paymentInfo.cardName,
+    paymentInfo.cardNumber.slice(-4),
+    items.reduce((sum, item) => sum + parseFloat(item.price), 0),
+    JSON.stringify(items)
+  ];
+
+  await pool.query(query, values);
+}
+
 module.exports = {
   registerUser,
   getUserByEmail,
   getUserById,
   getVehicles,
   getDistinct,
-  getVehicleById
+  getVehicleById,
+  saveOrder
 };

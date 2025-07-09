@@ -12,17 +12,13 @@ export function CartProvider({children}){
 });
 
     useEffect(() => {
-      console.log("🧺 CART STATE:", cartItems);
       localStorage.setItem("cart", JSON.stringify(cartItems));
     }, [cartItems]);
 
     const addToCart = (car) => {
-      console.log("🟢 Adding to cart:", car);
-
       setCartItems((prev) => {
         const carExists = prev.find((item) => item.id === car.id);
         const updated = carExists ? prev : [...prev, car];
-        console.log("🟢 Updated Cart:", updated);
         return updated;
       });
     };

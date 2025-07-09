@@ -15,6 +15,7 @@ import VehicleDetail from "./pages/VehicleDetail";
 import LoanCalculator from "./pages/LoanCalculator";
 import LoanInfo from "./pages/LoanInfo";
 import Cart from "./pages/Cart";
+import OrderConfirmation from "./Components/OrderConfirmation";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/cars/:id" element={<VehicleDetail />} />
           <Route path="/calculator" element={<LoanCalculator />} />
           <Route path="/loan-info" element={<LoanInfo />} />
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
         </Routes>
       </div>
       <Footer />

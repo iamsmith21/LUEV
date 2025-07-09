@@ -73,6 +73,18 @@ app.get("/filters",async(req,res)=>{
   }
 })
 
+app.post("/orders", async (req, res) => {
+  try {
+    const {order} = req.body;
+
+    await db.saveOrder(order);
+    res.status(201).json({message: "Ordered Saved Successfully!"});
+  } catch (err) {
+    console.error("Failed to save order", err);
+    res.status(500).json({message: "Internal Server Error"});
+  }
+});
+
 app.post("/register", async (req, res) => {
   const { email, password, firstname, lastname, mobile } = req.body;
   try {

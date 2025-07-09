@@ -1,5 +1,6 @@
+require("dotenv").config({ path: __dirname + "/../.env" });
 const { Client } = require("pg");
-require("dotenv").config();
+
 const usersTable = `CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     email VARCHAR(55) NOT NULL UNIQUE,
@@ -30,6 +31,20 @@ const vehicleTable=`CREATE TABLE IF NOT EXISTS vehicles(
     quantity INT NOT NULL CHECK (quantity >= 0)
 );`
 
+const ordersTable = `CREATE TABLE IF NOT EXISTS orders (
+  id SERIAL PRIMARY KEY,
+  customer_name VARCHAR(100) NOT NULL,
+  address TEXT NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  province VARCHAR(50) NOT NULL,
+  postal_code VARCHAR(20) NOT NULL,
+  card_name VARCHAR(100) NOT NULL,
+  card_last4 VARCHAR(4) NOT NULL,
+  total_amount NUMERIC(10, 2) NOT NULL,
+  items JSONB NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`
+
 const dummyDataVehicles=`INSERT INTO vehicles (
   name, brand, model, model_year, vehicle_type, price, mileage, is_used,
   description, exterior_color, interior_color, interior_material,
@@ -41,7 +56,7 @@ const dummyDataVehicles=`INSERT INTO vehicles (
  'Minor rear bumper damage reported, repaired professionally. No impact on vehicle performance.',
  'https://images.pexels.com/photos/13061032/pexels-photo-13061032.jpeg', 4),
 
-('Lucid Air', 'Lucid', 'Air', 2022, 'Sedan', 103591.82, 19302, TRUE,
+('BMW M3 Competition', 'BMW M3', 'Competition', 2022, 'Sedan', 103591.82, 19302, TRUE,
  'Lucid Air delivers luxury and long-range electric driving with a spacious interior and impressive tech.',
  'Green', 'Silver', 'Leather', TRUE,
  'Vehicle was involved in a minor fender bender; all repairs completed with OEM parts.',
@@ -157,16 +172,49 @@ const dummyDataVehicles=`INSERT INTO vehicles (
 
 `
 
+const dummyDataOrders = `INSERT INTO orders (
+  customer_name, address, city, province, postal_code,
+  card_name, card_last4, total_amount, items
+) VALUES (
+  'Jane Doe', '123 Example St', 'Toronto', 'ON', 'A1A1A1',
+  'Jane Doe', '1111', 30465.14,
+  '[{
+    "id": 1,
+    "name": "Kia EV6",
+    "price": "30465.14",
+    "model_year": 2023,
+    "brand": "Kia",
+    "vehicle_type": "SUV"
+  }]'::jsonb
+);`;
+
 async function main() {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
   });
   try {
     await client.connect();
-    await client.query(usersTable);
-    await client.query(vehicleTable);
-    await client.query(dummyDataVehicles);
-    console.log("tables created successfully");
+console.log("🔌 Connected to DB");
+
+const dbCheck = await client.query("SELECT current_database(), inet_server_addr(), inet_server_port();");
+console.log("🧠 Connected to:", dbCheck.rows[0]);
+
+await client.query(usersTable);
+console.log("✅ Users table created");
+
+await client.query(vehicleTable);
+console.log("✅ Vehicles table created");
+
+await client.query(ordersTable);
+console.log("✅ Orders table created");
+
+await client.query(dummyDataVehicles);
+console.log("✅ Vehicle data inserted");
+
+await client.query(dummyDataOrders);
+console.log("✅ Dummy order inserted");
+
+console.log("🎉 All tables created successfully");
   } catch (error) {
     console.log("error",error);
   } finally {
