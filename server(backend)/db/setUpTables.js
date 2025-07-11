@@ -194,27 +194,12 @@ async function main() {
   });
   try {
     await client.connect();
-console.log("🔌 Connected to DB");
-
-const dbCheck = await client.query("SELECT current_database(), inet_server_addr(), inet_server_port();");
-console.log("🧠 Connected to:", dbCheck.rows[0]);
-
-await client.query(usersTable);
-console.log("✅ Users table created");
-
-await client.query(vehicleTable);
-console.log("✅ Vehicles table created");
-
-await client.query(ordersTable);
-console.log("✅ Orders table created");
-
-await client.query(dummyDataVehicles);
-console.log("✅ Vehicle data inserted");
-
-await client.query(dummyDataOrders);
-console.log("✅ Dummy order inserted");
-
-console.log("🎉 All tables created successfully");
+    await client.query(usersTable);
+    await client.query(vehicleTable);
+    await client.query(ordersTable);
+    await client.query(dummyDataVehicles);
+    await client.query(dummyDataOrders);
+    console.log("All tables created successfully");
   } catch (error) {
     console.log("error",error);
   } finally {

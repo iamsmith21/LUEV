@@ -36,8 +36,16 @@ export function CartProvider({children}){
         });
     };
 
+
+
+
+    // For clearing our cart once the order is placed successfully
+    const clearCart = () => {
+      setCartItems([]);
+    };
+
     return(
-        <CartOperations.Provider value={{cartItems, addToCart, removeItemFromCart}}>{children}</CartOperations.Provider>
+        <CartOperations.Provider value={{cartItems, addToCart, removeItemFromCart, clearCart}}>{children}</CartOperations.Provider>
     )
 }
 
