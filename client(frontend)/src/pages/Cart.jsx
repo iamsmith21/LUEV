@@ -1,60 +1,71 @@
-import { useCart } from "../Components/CartOperations";
+import UseCart from "../contexts/UseCart";
 import { Link } from "react-router-dom";
+function Cart() {
+  const { cart, loading, error, updateQuantity, removeItem,totalPrice } = UseCart();
+
+  if (loading) return <p>Loading cart...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (cart.length === 0)
+    return <p className="m-5 text-center">Your cart is empty</p>;
 
 
-function Cart(){
-    const {cartItems, removeItemFromCart} = useCart();
 
-    return(
-        <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
-
-       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <>
-          {cartItems.map((car) => (
-            <div key={car.id} className="border p-4 rounded mb-4 shadow">
-              <img
-                src={car.image_url}
-                alt={car.name}
-                className="h-40 object-cover rounded mb-4"
-              />
-              <h2 className="text-xl font-semibold">{car.name}</h2>
-              <p className="text-gray-600">{car.model_year} · {car.brand}</p>
-              <p className="mt-2">Price: <strong>${parseFloat(car.price).toFixed(2)}</strong></p>
+  return (
+    <div className="flex m-4">
+      <div>
+        {cart.map((item) => (
+          <div key={item.id} className="mx-12 my-2 p-2">
+            <div className="flex gap-2">
+              <div>
+                <img src={item.image_url} alt="" className="h-32 w-32 object-cover rounded-md shadow hover:scale-105 transition duration-200 ease-in-out"
+/>
+              </div>
+              <div className="m-2 flex gap-3 items-center">
+              <p className="font-bold">{item.model_year} {item.name} | {item.vehicle_type} </p>
+              <button
+                className="text-green-700 border !rounded-full w-5 h-5 flex items-center justify-center !text-lg"
+                onClick={() =>
+                  updateQuantity(
+                    item.vehicle_id,
+                    Math.max(1, item.quantity - 1)
+                  )
+                }
+              >
+                -
+              </button>
+              <p>{item.quantity}</p>
+              <button
+                className="text-green-700 border !rounded-full w-5 h-5 flex items-center justify-center !text-lg"
+                onClick={() =>
+                  updateQuantity(item.vehicle_id, item.quantity + 1)
+                }
+              >
+                +
+              </button>
 
               <button
-                onClick={() => removeItemFromCart(car.id)}
-                className="mt-4 bg-red-600 text-white px-4 py-2 rounded"
+                className="bg-red-500 px-2 text-white rounded shadow-sm hover:bg-red-600"
+                onClick={() => removeItem(item.vehicle_id)}
               >
-                Remove from Cart
+                remove
               </button>
+              <p className="font-bold">
+                ${(item.price * item.quantity).toFixed(2)}
+              </p>
+              {item.customization_cost!=0? (<span className="font-bold">(+${item.customization_cost})</span>) :(<></>)}
             </div>
-          ))}
-
-          <div className="text-right mt-6 text-xl font-semibold">
-            Total: ${cartItems.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2)}
+            </div>
           </div>
-
-
-
-          {/* Proceed to Checkout Button */}
-          <div className="text-right mt-4">
-            <Link
-              to="/checkout"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition"
-            >
-              Proceed to Checkout
-            </Link>
-          </div>
-
-
-
-        </>
-      )}
+        ))}
+      </div>
+      <div className="p-4 ml-auto mr-20 mt-5 flex h-64 items-center justify-center flex-col fs-2 text-center border rounded">
+        <p className="font-bold">Total Price</p>
+        <p>$ {totalPrice.toFixed(2)}</p>
+       <Link to="/check-out"> <button className="border py-1 px-4 fs-5 m-4 rounded bg-green-700 hover:bg-green-600 text-white">Check out</button></Link>
+      </div>
     </div>
-    )
+  );
 }
-
 export default Cart;
+
+

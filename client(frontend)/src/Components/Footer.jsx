@@ -18,12 +18,12 @@ function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/Shop" className="custom" onClick={handleScrollToTop}>
+              <Link to="/cars" className="custom" onClick={handleScrollToTop}>
                 Shop Cars
               </Link>
             </li>
             <li>
-              <Link to="/CarCalculator" className="custom" onClick={handleScrollToTop}>
+              <Link to="/car-calculator" className="custom" onClick={handleScrollToTop}>
                 Finance with LUEV
               </Link>
             </li>
@@ -34,7 +34,7 @@ function Footer() {
           <h4 className="text-lg font-semibold mb-4">Company</h4>
           <ul className="space-y-2 padding-left">
             <li>
-              <Link to="/About" className="custom" onClick={handleScrollToTop}>
+              <Link to="/about" className="custom" onClick={handleScrollToTop}>
                 About Us
               </Link>
             </li>

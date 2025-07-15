@@ -1,460 +1,262 @@
-// import { useState } from "react";
-// import { useCart } from "../Components/CartOperations";
-// import { useNavigate } from "react-router-dom";
-
-// function Checkout() {
-//   const { cartItems } = useCart();
-//   const navigate = useNavigate();
-
-//   const [shippingInfo, setSI] = useState({
-//     name: "",
-//     address: "",
-//     city: "",
-//     province: "",
-//     postalCode: "",
-//   });
-
-//   const [paymentInfo, setPI] = useState({
-//     cardName: "",
-//     cardNumber: "",
-//     expiry: "",
-//     cvv: "",
-//   });
-
-//   const handleInputChange = (e, whichPart) => {
-//     const { name, value } = e.target;
-
-//     // Restrict to digits only for cardNumber and cvv
-//     const numericFields = ["cardNumber", "cvv", "expiry"];
-//     const cleanedValue = numericFields.includes(name)
-//       ? value.replace(/\D/g, "")
-//       : value;
-
-//     if (whichPart === "shipping") {
-//       setSI((prev) => ({
-//         ...prev,
-//         [name]: cleanedValue,
-//       }));
-//     } else if (whichPart === "payment") {
-//       setPI((prev) => ({
-//         ...prev,
-//         [name]: cleanedValue,
-//       }));
-//     }
-//   };
-
-//   const handleSubmit = async (e) => {
-//             e.preventDefault();
-    
-//             const orderPayload = {
-//                 shippingInfo,
-//                 paymentInfo,
-//                 items: cartItems,
-//             };
-            
-    
-//             try {
-//                 const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
-//                     method: "POST",
-//                     headers: { "Content-Type": "application/json" },
-//                     body: JSON.stringify({ order: orderPayload }),
-//                 });
-    
-//                 if (res.ok) {
-//                     alert("Order Placed and Stored Successfully!");
-//                     navigate("/order-confirmation");
-//                 } else {
-//                     alert("Failed to Save Order");
-//                 }
-//             } catch (err) {
-//                 console.error(err);
-//                 alert("An error occurred!");
-//             }
-//     };
-
-//   const total = cartItems
-//     .reduce((sum, item) => sum + parseFloat(item.price), 0)
-//     .toFixed(2);
-
-//   return (
-//     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg font-sans text-gray-900">
-//       <h1 className="text-4xl font-extrabold mb-10 tracking-wide">Checkout</h1>
-
-//       {cartItems.length === 0 ? (
-//         <p>Your cart is empty.</p>
-//       ) : (
-//         <>
-//           <form onSubmit={handleSubmit} className="grid gap-6" noValidate>
-//             {/* Shipping Info */}
-//             <section>
-//               <h2 className="text-2xl font-semibold mb-6 tracking-wide">
-//                 Shipping Information
-//               </h2>
-//               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                 {[
-//                   { name: "name", placeholder: "Full Name", pattern: ".+" },
-//                   { name: "address", placeholder: "Address", pattern: ".+" },
-//                   { name: "city", placeholder: "City", pattern: ".+" },
-//                   { name: "province", placeholder: "Province", pattern: ".+" },
-//                   {
-//                     name: "postalCode",
-//                     placeholder: "Postal Code",
-//                     pattern: "[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d",
-//                     title: "Postal code format: A1A 1A1",
-//                   },
-//                 ].map(({ name, placeholder, pattern, title }) => (
-//                   <input
-//                     key={name}
-//                     type="text"
-//                     name={name}
-//                     placeholder={placeholder}
-//                     required
-//                     pattern={pattern}
-//                     title={title}
-//                     value={shippingInfo[name]}
-//                     onChange={(e) => handleInputChange(e, "shipping")}
-//                     className="border border-gray-300 rounded-md px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-//                   />
-//                 ))}
-//               </div>
-//             </section>
-
-//             {/* Payment Info */}
-//             <section>
-//               <h2 className="text-xl font-semibold mb-2 tracking-wide">
-//                 Payment Information
-//               </h2>
-//               <div className="grid md:grid-cols-2 gap-4">
-//                 {[
-//                   {
-//                     name: "cardName",
-//                     placeholder: "Name on Card",
-//                     pattern: ".+",
-//                     title: "Please enter the name on your card",
-//                     maxLength: 50,
-//                   },
-//                   {
-//                     name: "cardNumber",
-//                     placeholder: "Card Number",
-//                     pattern: "\\d{16}",
-//                     title: "Card number must be exactly 16 digits",
-//                     maxLength: 16,
-//                   },
-//                   {
-//                     name: "expiry",
-//                     placeholder: "MM/YY",
-//                     pattern: "^(0[1-9]|1[0-2])\\/\\d{2}$",
-//                     title: "Expiry date must be in MM/YY format",
-//                     maxLength: 5,
-//                   },
-//                   {
-//                     name: "cvv",
-//                     placeholder: "CVV",
-//                     pattern: "\\d{3,4}",
-//                     title: "CVV must be 3 or 4 digits",
-//                     maxLength: 4,
-//                   },
-//                 ].map(({ name, placeholder, pattern, title, maxLength }) => (
-//                   <input
-//                     key={name}
-//                     type="text"
-//                     name={name}
-//                     placeholder={placeholder}
-//                     required
-//                     pattern={pattern}
-//                     title={title}
-//                     maxLength={maxLength}
-//                     value={paymentInfo[name]}
-//                     onChange={(e) => handleInputChange(e, "payment")}
-//                     className="border border-gray-300 rounded-md px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-//                   />
-//                 ))}
-//               </div>
-//             </section>
-
-//             {/* Order Summary */}
-//             <div className="flex justify-between items-center border-t pt-6">
-//               <span className="text-xl font-semibold tracking-wide">Total:</span>
-//               <span className="text-2xl font-extrabold">${total}</span>
-//             </div>
-
-//             {/* Submit Button */}
-//             <button
-//               type="submit"
-//               className="w-full bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600 text-white py-4 rounded-lg font-semibold tracking-wide shadow-lg transition"
-//             >
-//               Place Order
-//             </button>
-//           </form>
-//         </>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default Checkout;
-
-
-
-
-
-
-
-
+import UseCart from "../contexts/UseCart";
 import { useState } from "react";
-import { useCart } from "../Components/CartOperations";
 import { useNavigate } from "react-router-dom";
-
 function Checkout() {
-  const { cartItems, clearCart } = useCart();
   const navigate = useNavigate();
-
-  const [shippingInfo, setSI] = useState({
-    name: "",
-    address: "",
+  const { cart, totalPrice, clearCart } = UseCart();
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    street: "",
     city: "",
     province: "",
-    postalCode: "",
-  });
-
-  const [paymentInfo, setPI] = useState({
-    cardName: "",
+    postal: "",
     cardNumber: "",
-    expiry: "",
     cvv: "",
+    expiry: "",
+    holderName: "",
   });
-
-  const handleInputChange = (e, whichPart) => {
-    const { name, value } = e.target;
-
-    // this is for Restriction to digits for cardNumber, cvv and expiry
-    const numericFields = ["cardNumber", "cvv"];
-    const cleanedValue = numericFields.includes(name)
-      ? value.replace(/\D/g, "")
-      : value;
-
-    if (whichPart === "shipping") {
-      setSI((prev) => ({
-        ...prev,
-        [name]: cleanedValue,
-      }));
-    } else if (whichPart === "payment") {
-      setPI((prev) => ({
-        ...prev,
-        [name]: cleanedValue,
-      }));
-    }
-  };
-
-
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const { cardName, cardNumber, expiry, cvv } = paymentInfo;
-  
-    const errors = [];
-  
-    if (!cardName.trim()) {
-      errors.push("Name on card is required.");
-    }
-    if (!cardNumber.match(/^\d{16}$/)) {
-      errors.push("Card number must be 16 digits.");
-    }
-    if (!expiry.match(/^(0[1-9]|1[0-2])\/\d{2}$/)) {
-      errors.push("Expiry must be in MM/YY format.");
-    }
-    if (!cvv.match(/^\d{3,4}$/)) {
-      errors.push("CVV must be 3 or 4 digits.");
-    }
-  
-    if (errors.length > 0) {
-      alert("Please fix the following:\n\n" + errors.join("\n"));
-      return; 
-    }
-  
-    const orderPayload = {
-      shippingInfo,
-      paymentInfo,
-      items: cartItems,
-    };
-  
+
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order: orderPayload }),
-      });
-  
-      if (res.ok) {
-        alert("Order Placed and Stored Successfully!");
-        clearCart();
-        navigate("/order-confirmation");
-      } else {
-        alert("Failed to Save Order");
+      const cartItems = cart.map((item) => ({
+        vehicle_id: item.vehicle_id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        customizations: item.customization_ids || [],
+        customization_cost: item.customization_cost || 0,
+      }));
+
+      const orderData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        street: formData.street,
+        city: formData.city,
+        province: formData.province,
+        postal: formData.postal,
+        cardNumber: formData.cardNumber,
+        cartItems,
+        totalPrice,
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/check-out`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to place order");
       }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred!");
+      clearCart();
+      alert("Order placed successfully! ");
+      navigate("/");
+    } catch (error) {
+      console.error("Order placement error:", error);
+      alert("Error placing order: " + error.message);
     }
   };
-  
 
-
-
-
-  // const handleSubmit = async (e) => {
-  //       e.preventDefault();
-
-  //       const orderPayload = {
-  //           shippingInfo,
-  //           paymentInfo,
-  //           items: cartItems,
-  //       };
-        
-
-  //       try {
-  //           const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
-  //               method: "POST",
-  //               headers: { "Content-Type": "application/json" },
-  //               body: JSON.stringify({ order: orderPayload }),
-  //           });
-
-  //           if (res.ok) {
-  //               alert("Order Placed and Stored Successfully!");
-  //               clearCart(); // for a successfull order we will clear our cart
-  //               navigate("/order-confirmation");
-  //           } else {
-  //               alert("Failed to Save Order");
-  //           }
-  //       } catch (err) {
-  //           console.error(err);
-  //           alert("An error occurred!");
-  //       }
-  //   };
-
-  const total = cartItems
-    .reduce((sum, item) => sum + parseFloat(item.price), 0)
-    .toFixed(2);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg font-sans text-gray-900">
-      <h1 className="text-4xl font-extrabold mb-10 tracking-wide">Checkout</h1>
-
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <>
-          <form onSubmit={handleSubmit} className="grid gap-6" noValidate>
-            
-            {/* Shipping Info */}
-            <section>
-              <h2 className="text-2xl font-semibold mb-6 tracking-wide">
-                Shipping Information
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  { name: "name", placeholder: "Full Name", pattern: ".+" },
-                  { name: "address", placeholder: "Address", pattern: ".+" },
-                  { name: "city", placeholder: "City", pattern: ".+" },
-                  { name: "province", placeholder: "Province", pattern: ".+" },
-                  {
-                    name: "postalCode",
-                    placeholder: "Postal Code",
-                    // pattern: "[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d",
-                    title: "Postal code format: A1A 1A1",
-                    maxLength: 6
-                  },
-                ].map(({ name, placeholder, pattern, title }) => (
-                  <input
-                    key={name}
-                    type="text"
-                    name={name}
-                    placeholder={placeholder}
-                    required
-                    pattern={pattern}
-                    title={title}
-                    value={shippingInfo[name]}
-                    onChange={(e) => handleInputChange(e, "shipping")}
-                    className="border border-gray-300 rounded-md px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                  />
-                ))}
+    <div className="flex h-auto items-start m-4 relative">
+      <div className="p-4 m-2">
+        <form action="" onSubmit={handleSubmit}>
+          <div className="mb-4 p-4 shadow-sm border rounded">
+            <h3 className="text-xl font-semibold mb-4">Shipping Address</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+              <div>
+                <label htmlFor="firstName" className="block font-medium mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  placeholder="Enter your first name"
+                  className="w-full py-2 px-3 border rounded bg-white"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
               </div>
-            </section>
 
-            {/* Payment Info */}
-            <section>
-              <h2 className="text-xl font-semibold mb-2 tracking-wide">
-                Payment Information
-              </h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                {[
-                  {
-                    name: "cardName",
-                    placeholder: "Name on Card",
-                    pattern: ".+",
-                    title: "Please enter the name on your card",
-                    maxLength: 50,
-                  },
-                  {
-                    name: "cardNumber",
-                    placeholder: "Card Number",
-                    pattern: "\\d{16}",
-                    title: "Card number must be exactly 16 digits",
-                    maxLength: 16,
-                  },
-                  {
-                    name: "expiry",
-                    placeholder: "MM/YY",
-                    pattern: "^(0[1-9]|1[0-2])\\/\\d{2}$",
-                    title: "Expiry date must be in MM/YY format",
-                    maxLength: 5,
-                  },
-                  {
-                    name: "cvv",
-                    placeholder: "CVV",
-                    pattern: "\\d{3,4}",
-                    title: "CVV must be 3 or 4 digits",
-                    maxLength: 4,
-                  },
-                ].map(({ name, placeholder, pattern, title, maxLength }) => (
-                  <input
-                    key={name}
-                    type="text"
-                    name={name}
-                    placeholder={placeholder}
-                    required
-                    pattern={pattern}
-                    title={title}
-                    maxLength={maxLength}
-                    value={paymentInfo[name]}
-                    onChange={(e) => handleInputChange(e, "payment")}
-                    className="border border-gray-300 rounded-md px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                  />
-                ))}
+              <div>
+                <label htmlFor="lastName" className="block font-medium mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Enter your last name"
+                  className="w-full py-2 px-3 border rounded"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
               </div>
-            </section>
 
-            {/* Order Summary */}
-            <div className="flex justify-between items-center border-t pt-6">
-              <span className="text-xl font-semibold tracking-wide">Total:</span>
-              <span className="text-2xl font-extrabold">${total}</span>
+              <div>
+                <label htmlFor="street" className="block font-medium mb-1">
+                  Street Name
+                </label>
+                <input
+                  type="text"
+                  id="street"
+                  name="street"
+                  placeholder="Enter your street"
+                  className="w-full py-2 px-3 border rounded"
+                  value={formData.street}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="city" className="block font-medium mb-1">
+                  City
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  placeholder="Enter your city"
+                  className="w-full py-2 px-3 border rounded"
+                  value={formData.city}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="province" className="block font-medium mb-1">
+                  Province
+                </label>
+                <input
+                  type="text"
+                  id="province"
+                  name="province"
+                  placeholder="Enter your province"
+                  className="w-full py-2 px-3 border rounded"
+                  value={formData.province}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="postal" className="block font-medium mb-1">
+                  Postal Code
+                </label>
+                <input
+                  type="text"
+                  id="postal"
+                  name="postal"
+                  placeholder="Enter your postal code"
+                  className="w-full py-2 px-3 border rounded"
+                  value={formData.postal}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600 text-white py-4 rounded-lg font-semibold tracking-wide shadow-lg transition"
-            >
-              Place Order
-            </button>
-          </form>
-        </>
-      )}
+          </div>
+          <div className="mb-4 p-4 shadow-sm border rounded mt-5">
+            <h3 className="text-xl font-semibold mb-4">Payment Information</h3>
+            <div className="grid grid-cols-2 gap-x-10 gap-y-6">
+              <div>
+                <label htmlFor="card-number" className="block font-medium mb-1">
+                  Card Number
+                </label>
+                <input
+                  type="text"
+                  id="cardNumber"
+                  name="cardNumber"
+                  placeholder="4413 3244 2444 4525"
+                  className="w-full py-2 px-3 border rounded"
+                  onChange={handleChange}
+                  value={formData.cardNumber}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="cvv" className="block font-medium mb-1">
+                  CVV
+                </label>
+                <input
+                  type="text"
+                  id="cvv"
+                  name="cvv"
+                  placeholder="786"
+                  className="w-full py-2 px-3 border rounded"
+                  onChange={handleChange}
+                  value={formData.cvv}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="expiry" className="block font-medium mb-1">
+                  Expiry
+                </label>
+                <input
+                  type="text"
+                  id="expiry"
+                  name="expiry"
+                  placeholder="MM / YY"
+                  className="w-full py-2 px-3 border rounded"
+                  value={formData.expiry}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="holder-name" className="block font-medium mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="holderName"
+                  name="holderName"
+                  placeholder="Enter card holder Name"
+                  className="w-full py-2 px-3 border rounded"
+                  value={formData.holderName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="absolute right-25 top-40 border py-1 px-4 fs-5 m-4 rounded bg-green-700 hover:bg-green-600 text-white"
+          >
+            Place Order
+          </button>
+        </form>
+      </div>
+      <div className="p-4 ml-auto mr-20 mt-10 fs-2 text-center border rounded">
+        <p className="font-bold">Total Price</p>
+        <p className="h-32">$ {totalPrice.toFixed(2)}</p>
+      </div>
     </div>
   );
 }
-
 export default Checkout;
-
