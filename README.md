@@ -45,7 +45,7 @@ npm install
 Create a `.env` file in the `server/` directory:
 
 ```env
-PORT=3000
+PORT=5001
 DATABASE_URL=your_postgresql_connection_url (postgresql://username:password@host:port/database_name)
 FRONTEND_URL=http://localhost:5173
 SESSION_SECRET="some secret"
