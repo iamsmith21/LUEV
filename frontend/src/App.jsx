@@ -8,7 +8,7 @@ import NavbarEle from "./components/NavbarEle";
 import HowFinancingWorks from "./pages/HowFinancingWorks";
 import CarCalculator from "./pages/CarCalculator";
 import Contact from "./pages/Contact";
-import Footer from "./Components/Footer";
+import Footer from "./components/Footer";
 import Login from "./pages/login";
 import VehicleDetail from "./pages/VehicleDetail";
 import Admin from "./pages/Admin";
