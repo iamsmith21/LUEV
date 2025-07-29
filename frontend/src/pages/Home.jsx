@@ -1,6 +1,6 @@
 import coverImg from "../assets/homeImg/Cover.jpg";
 import BrowseByType from "../components/BrowseByType";
-import Detail from "../components/detail";
+import Detail from "../components/Detail";
 import Reviews from "../components/Reviews";
 function Home() {
   return (
