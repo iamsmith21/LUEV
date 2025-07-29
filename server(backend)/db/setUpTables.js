@@ -2,6 +2,14 @@ const { Client } = require("pg");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+      rejectUnauthorized: false,
+    },
+});
+
 const usersTable = `CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     email VARCHAR(55) NOT NULL UNIQUE,
@@ -371,9 +379,6 @@ ON CONFLICT DO NOTHING;
 `;
 
 async function main() {
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-  });
   try {
     console.log("Using DB URL:", process.env.DATABASE_URL);
 
