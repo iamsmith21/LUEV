@@ -1,7 +1,7 @@
 import coverImg from "../assets/homeImg/Cover.jpg";
-import BrowseByType from "../Components/BrowseByType";
-import Detail from "../Components/detail";
-import Reviews from "../Components/Reviews";
+import BrowseByType from "../components/BrowseByType";
+import Detail from "../components/detail";
+import Reviews from "../components/Reviews";
 function Home() {
   return (
     <>

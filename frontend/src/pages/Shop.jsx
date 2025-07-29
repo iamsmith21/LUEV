@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Search from "../Components/search";
-import CarList from "../Components/CarList";
+import Search from "../components/search";
+import CarList from "../components/CarList";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function Shop() {
