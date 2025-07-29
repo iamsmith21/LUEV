@@ -9,7 +9,7 @@ import HowFinancingWorks from "./pages/HowFinancingWorks";
 import CarCalculator from "./pages/CarCalculator";
 import Contact from "./pages/Contact";
 import Footer from "./components/Footer";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import VehicleDetail from "./pages/VehicleDetail";
 import Admin from "./pages/Admin";
 import SalesReport from "./pages/SalesReport";

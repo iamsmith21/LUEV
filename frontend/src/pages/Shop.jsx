@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Search from "../components/search";
+import Search from "../components/Search";
 import CarList from "../components/CarList";
 import { useNavigate, useLocation } from "react-router-dom";
 
