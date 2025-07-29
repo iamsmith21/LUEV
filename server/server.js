@@ -56,6 +56,7 @@ app.use("/check-out",CheckoutRouter)
 app.use("/",AdminRouter)
 
 
-app.listen(process.env.PORT, () => {
-  console.log(`Your server is running on PORT ${process.env.PORT}`);
+const PORT = process.env.PORT || 5000; // use Render’s port first, fallback to 5000
+app.listen(PORT, () => {
+  console.log(`Your server is running on PORT ${PORT}`);
 });
