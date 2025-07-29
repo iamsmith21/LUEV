@@ -64,7 +64,7 @@ function CartProvider({ children }) {
       setError(err.message);
     }
   };
-  const addToCart = async (vehicle_id, user_id, customizations = []) => {
+  const addToCart = async (vehicle_id, customizations = []) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
         method: "POST",
