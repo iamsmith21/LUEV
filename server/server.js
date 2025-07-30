@@ -12,6 +12,7 @@ const CheckoutRouter=require("./routes/CheckoutRouter")
 const AdminRouter=require("./routes/AdminRouter")
 const session = require("express-session");
 const passport = require("passport");
+app.set('trust proxy', 1);
 
 const cors = require("cors");
 
