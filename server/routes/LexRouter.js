@@ -3,6 +3,7 @@ const router = express.Router();
 const {getCarByName, compareEVs} = require('../controller/LexController');
 
 router.post('/lex-webhook', async (req, res) => {
+    console.log('Request body:', req.body);
     const {intent} = req.body;
 
     if (intent === 'SearchCarByName') {
