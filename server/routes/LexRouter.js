@@ -4,15 +4,18 @@ const {getCarByName, compareEVs} = require('../controller/LexController');
 
 router.post('/lex-webhook', async (req, res) => {
     console.log('Request body:', req.body);
-    const {intent} = req.body;
+    const {intent, slots} = req.body;
 
-    if (intent === 'SearchCarByName') {
-    const msg = await getCarByName(req.body.model_name);
+   if (intent === 'SearchCarByName') {
+    const carName = slots?.carName;
+    const msg = await getCarByName(carName);
     return res.json({ message: msg });
   }
 
   if (intent === 'CompareEVs') {
-    const msg = await compareEVs(req.body.car_one, req.body.car_two);
+    const carOne = slots?.car_one;
+    const carTwo = slots?.car_two;
+    const msg = await compareEVs(carOne, carTwo);
     return res.json({ message: msg });
   }
 
