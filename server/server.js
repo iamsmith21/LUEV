@@ -12,6 +12,8 @@ const CheckoutRouter=require("./routes/CheckoutRouter")
 const AdminRouter=require("./routes/AdminRouter")
 const session = require("express-session");
 const passport = require("passport");
+const pgSession = require('connect-pg-simple')(session); //c1
+
 app.set('trust proxy', true);
 
 const cors = require("cors");
@@ -31,11 +33,31 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       httpOnly: true,
+//       secure: true,
+//       sameSite: "none",
+//       maxAge: 24 * 60 * 60 * 1000,
+//     },
+//   })
+// );
+
 app.use(
   session({
+    store: new pgSession({
+      conString: process.env.DATABASE_URL, // internal database URL
+      tableName: 'session',
+      createTableIfMissing: true
+    }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    name: 'connect.sid',
     cookie: {
       httpOnly: true,
       secure: true,
@@ -44,6 +66,7 @@ app.use(
     },
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
