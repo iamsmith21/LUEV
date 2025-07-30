@@ -21,33 +21,14 @@ const cors = require("cors");
 const { initialize } = require("./passport-config");
 initialize(passport);
 
-// app.use(
-//   cors({
-//     origin: "https://luev-frontend.onrender.com",
-//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-//     allowedHeaders: ["Content-Type"],
-//     credentials: true,
-//   })
-// );
 app.use(
   cors({
     origin: "https://luev-frontend.onrender.com",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"], 
-    exposedHeaders: ["Set-Cookie"], 
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type"],
     credentials: true,
-    preflightContinue: false, 
-    optionsSuccessStatus: 200
   })
 );
-
-app.options('*', cors({
-  origin: "https://luev-frontend.onrender.com",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-  exposedHeaders: ["Set-Cookie"]
-}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
