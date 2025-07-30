@@ -6,11 +6,13 @@ router.post('/lex-webhook', async (req, res) => {
     console.log('Request body:', req.body);
     const {intent, slots} = req.body;
 
-   if (intent === 'SearchCarByName') {
-    const carName = slots?.carName;
-    const msg = await getCarByName(carName);
-    return res.json({ message: msg });
-  }
+  if (intent === 'SearchCarByName') {
+  const carName = slots?.carName;
+  console.log("Looking up car name:", carName);
+  const msg = await getCarByName(carName);
+  return res.json({ message: msg });
+}
+
 
   if (intent === 'CompareEVs') {
     const carOne = slots?.car_one;

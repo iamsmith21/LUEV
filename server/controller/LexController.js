@@ -4,8 +4,9 @@ exports.getCarByName = async (name) => {
   const result = await pool.query("SELECT * FROM vehicles WHERE LOWER(name) = LOWER($1)", [name]);
   if (result.rows.length === 0) return `No car found named ${name}.`;
   const car = result.rows[0];
-  return `The ${car.name} has a range of ${car.range} km and costs $${car.price}.`;
+  return `The ${car.name} (${car.brand} ${car.model} ${car.model_year}) has a mileage of ${car.mileage} km and costs $${car.price}.`;
 };
+
 
 exports.compareEVs = async (car1, car2) => {
   const [res1, res2] = await Promise.all([
