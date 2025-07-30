@@ -20,7 +20,7 @@ initialize(passport);
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://luev-frontend.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
