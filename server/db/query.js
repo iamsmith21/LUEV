@@ -29,8 +29,8 @@ async function getVehicleById(id) {
 
 async function getVehicleByName(name) {
   const { rows } = await pool.query(
-    "SELECT * FROM vehicles WHERE LOWER(name) = LOWER($1)",
-    [name]
+    "SELECT * FROM vehicles WHERE name ILIKE $1",
+    [`%${name}%`]
   );
   return rows[0];
 }

@@ -49,17 +49,25 @@ exports.chat = async (req, res) => {
 };
 
 async function extractCarName(message) {
-  const carKeywords = [
-    "Tesla", "Lucid", "Kia", "Hyundai", "Honda", "Mazda", "Porsche",
-    "Chevrolet", "BMW", "Nissan", "Volkswagen", "Polestar", "Jaguar",
-    "Ford", "Chrysler", "Audi",
+  const vehicleNames = [
+    'Lucid Air', 'Hyundai Kona Electric', 'Honda e', 'Kia EV6', 'Tesla Model Y',
+    'Nissan Leaf', 'Tesla Model S', 'Polestar 2', 'Jaguar I-PACE', 'Ford F-150 Lightning',
+    'Tesla Model X', 'Chrysler Pacifica Hybrid', 'BMW i4 M50', 'Chevrolet Silverado EV',
+    'BMW i3', 'Lucid Gravity', 'Mazda CX-30 EV', 'Audi e-tron', 'Nissan Ariya',
+    'Polestar 3', 'Audi Q5 e', 'Porsche Macan EV', 'Volkswagen e-Golf', 'BMW iX3',
+    'BMW iX', 'Chevrolet Bolt EV', 'Honda Insight', 'Ford Mustang Mach-E', 'Audi Q3 e',
+    'Tesla Cybertruck', 'Hyundai Ioniq 5', 'Mazda MX-5 EV', 'BMW X1 EV',
+    'Chevrolet Equinox EV', 'Polestar 1', 'Ford Mustang EV', 'Volkswagen ID. Buzz',
+    'Audi A6 e-tron', 'Tesla Roadster', 'Honda Clarity EV'
   ];
-  
-  for (const keyword of carKeywords) {
-    if (message.toLowerCase().includes(keyword.toLowerCase())) {
-      return keyword;
+  const lowerCaseMessage = message.toLowerCase();
+  let bestMatch = null;
+  for (const name of vehicleNames) {
+    if (lowerCaseMessage.includes(name.toLowerCase())) {
+      if (!bestMatch || name.length > bestMatch.length) {
+        bestMatch = name;
+      }
     }
   }
-  
-  return null;
+  return bestMatch;
 }
