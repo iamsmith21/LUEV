@@ -6,9 +6,7 @@ function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const navigate = useNavigate();
   const messagesEndRef = useRef(null);
-
 
   useEffect(() => {
     if (isOpen && messagesEndRef.current) {
@@ -16,52 +14,26 @@ function ChatBot() {
     }
   }, [messages, isOpen]);
 
-
-  useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      setMessages([
-        {
-          sender: "bot",
-          text: "👋 Hi there! I’m your friendly assistant. Ask me about our vehicles, support, or financing options."
-        },
-      ]);
-    }
-  }, [isOpen, messages.length]);
-
-  function includesAny(text, keywords) {
-    return keywords.some(keyword => text.includes(keyword));
-  }
-  
-
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMsg = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMsg]);
 
-    const lower = input.toLowerCase();
-    let response = "Sorry, I didn't understand that. Please try to type keywords (support/loan/Car name) etc.";
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
 
-
-    const vehicleKeywords = ["vehicle", "car", "tesla", "lucid", 
-                             "kia", "ev", "hyundai", "honda", 
-                             "mazda", "porsche", "chevrolet", "bmw",
-                             "nissan", "volkswagen", "polestar", "jaguar",
-                             "ford", "chrysler", "audi", "suv", "coupe",
-                             "sedan", "minivan", "hatchback", "electric"];
-
-    if (includesAny(lower, vehicleKeywords)) {
-      response = "Navigating to our car listings!";
-      navigate("/cars");
-    } else if (lower.includes("support") || lower.includes("help") || lower.includes("faq")) {
-      response = "Taking you to the support page.";
-      navigate("/contact");
-    } else if (lower.includes("finance") || lower.includes("loan")) {
-      response = "Here's how financing works.";
-      navigate("/how-financing-works");
+      const data = await res.json();
+      setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+    } catch (error) {
+      console.error("Chat error:", error);
+      setMessages((prev) => [...prev, { sender: "bot", text: "Sorry, something went wrong." }]);
     }
 
-    setMessages((prev) => [...prev, { sender: "bot", text: response }]);
     setInput("");
   };
 
