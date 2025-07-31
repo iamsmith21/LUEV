@@ -10,7 +10,7 @@ const ReviewRouter=require("./routes/ReviewRouter")
 const CustomizeRouter=require("./routes/CustomizeRouter")
 const CheckoutRouter=require("./routes/CheckoutRouter")
 const AdminRouter=require("./routes/AdminRouter")
-const lexRouter = require("./routes/LexRouter")
+const ChatRouter = require("./routes/ChatRouter");
 const session = require("express-session");
 const passport = require("passport");
 const pgSession = require('connect-pg-simple')(session); //c1
@@ -79,7 +79,7 @@ app.use("/reviews",ReviewRouter)
 app.use("/customizations",CustomizeRouter)
 app.use("/check-out",CheckoutRouter)
 app.use("/",AdminRouter)
-app.use('/', lexRouter)
+app.use("/", ChatRouter);
 
 
 const PORT = process.env.PORT || 5000; // use Render’s port first, fallback to 5000
