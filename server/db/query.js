@@ -30,7 +30,7 @@ async function getVehicleById(id) {
 async function getVehicleByName(name) {
   const { rows } = await pool.query(
     "SELECT * FROM vehicles WHERE name ILIKE $1",
-    [`%${name}%`]
+    [name]
   );
   return rows[0];
 }
