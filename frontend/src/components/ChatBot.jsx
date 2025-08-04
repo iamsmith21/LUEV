@@ -18,17 +18,32 @@ function ChatBot() {
     if (!input.trim()) return;
 
     const userMsg = { sender: "user", text: input };
-    setMessages((prev) => [...prev, userMsg]);
+    
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
+    setInput("");
 
+    // try {
+    //   const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ message: input }),
+    //   });
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({
+            history: newMessages.map(msg => ({
+              role: msg.sender === 'bot' ? 'model' : 'user',
+              parts: [{ text: msg.text }]
+            })),
+            message: input
+          }),
       });
 
       const data = await res.json();
-      setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+      setMessages([...newMessages, { sender: "bot", text: data.reply }]);
     } catch (error) {
       console.error("Chat error:", error);
       setMessages((prev) => [...prev, { sender: "bot", text: "Sorry, something went wrong." }]);
