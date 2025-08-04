@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({model: "gemini-2.0-flash"});
 
 exports.chat = async (req, res) => {
-  const { message, history } = req.body;
+  const { message, history = []} = req.body;
 
   try {
     const user_que = await analyzeUserIntent(message, history);
