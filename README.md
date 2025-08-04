@@ -5,6 +5,14 @@ A full-stack web application for browsing and filtering electric vehicles.
 
 ---
 
+## 🚀 Deployment
+
+- 🔧 **Backend**: Deployed on [Render]  
+- 💻 **Frontend**: Deployed on [Render]
+
+> Both the client and server are hosted on Render for seamless full-stack deployment.
+
+
 ## 🧱 Project Structure
 
 ```
