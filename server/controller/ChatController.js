@@ -9,7 +9,7 @@ exports.chat = async (req, res) => {
 
   try {
     const user_que = await analyzeUserIntent(message, history);
-    if (user_que.intent === "get_spec" && user_que.car_name){
+    if (user_que.intent === "get_specific_attribute" && user_que.car_name){
         const car = await db.getVehicleByName(user_que.car_name);
 
         if (car && user_que.attribute){
@@ -57,15 +57,15 @@ async function analyzeUserIntent(message, history) {
 
     Return a JSON object with the following structure:
     {
-      "intent": "...", // "get_spec", "get_general_info", or "other"
+      "intent": "...", // "get_specific_attribute", "get_general_info", or "other"
       "car_name": "...", // The full name of the vehicle, or null
       "attribute": "..." // The specific attribute requested (e.g., "price"), or null
     }
 
     Examples:
-    - User message: "what is the price of the Tesla Model Y" -> {"intent": "get_spec", "car_name": "Tesla Model Y", "attribute": "price"}
+    - User message: "what is the price of the Tesla Model Y" -> {"intent": "get_specific_attribute", "car_name": "Tesla Model Y", "attribute": "price"}
     - User message: "tell me about the lucid air" -> {"intent": "get_general_info", "car_name": "Lucid Air", "attribute": null}
-    - User message: "mileage on the Honda e" -> {"intent": "get_spec", "car_name": "Honda e", "attribute": "mileage"}
+    - User message: "mileage on the Honda e" -> {"intent": "get_specific_attribute", "car_name": "Honda e", "attribute": "mileage"}
     - User message: "How does financing work?" -> {"intent": "other", "car_name": null, "attribute": null}
   `;
 
