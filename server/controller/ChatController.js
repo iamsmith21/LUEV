@@ -9,6 +9,21 @@ exports.chat = async (req, res) => {
 
   try {
     const user_que = await analyzeUserIntent(message, history);
+
+    //for follow up que. we will get the car name again from the history!
+    if (user_que.intent === "get_specific_attribute" && !user_que.car_name) {
+      for (let i = history.length - 1; i >= 0; i--) {
+        const pastMessage = history[i].parts[0].text.toLowerCase();
+        const vehicleNames = getVehicleNames();
+        const foundCar = vehicleNames.find(name => pastMessage.includes(name.toLowerCase()));
+        if (foundCar) {
+          user_que.car_name = foundCar;
+          break;
+        }
+      }
+    }
+
+
     if (user_que.intent === "get_specific_attribute" && user_que.car_name){
         const car = await db.getVehicleByName(user_que.car_name);
 
